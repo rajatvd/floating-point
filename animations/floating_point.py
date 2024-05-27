@@ -26,6 +26,9 @@ config.background_color = "#FFFFFF"
 
 def myround(x, base, places_to_round):
     out = round(x / base, ndigits=places_to_round + 1) * base
+    # convert x to base base
+
+    # print(f"rounding {x} to {out}")
     return out
 
 
@@ -33,10 +36,11 @@ class RoundOff(PresentationScene):
     def construct(self):
 
         base = 10
+        assert base == 10, "base must be 10 for now"
         places_to_round = 1
         tick_diff = base**-places_to_round
-        center = 0.3
         count = 3
+        center = tick_diff * count
         x_range = [center - count * tick_diff, center + count * tick_diff, tick_diff]
         unit_length = 1.3
 
