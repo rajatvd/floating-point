@@ -41,7 +41,7 @@ class RoundOff(PresentationScene):
         unit_length = 1.3
 
         stroke_width = 4
-        vertical_shift = 1
+        vertical_shift = 1.2
         horizontal_shift = 2
         number_shift_factor = 2.3
 
@@ -202,8 +202,8 @@ class RoundOff(PresentationScene):
         self.add(interval, filling)
 
         # marker movement animation below
-        stops = [count - 0.8, -count + 0.8, 0]
-        speed = 0.5
+        stops = [count - 0.7, -count + 0.7, 0]
+        speed = 0.4
 
         prev_stop = 0
         for stop in stops:
