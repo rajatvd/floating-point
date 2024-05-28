@@ -219,3 +219,8 @@ class RoundOff(PresentationScene):
                 ).move_to(number_line.n2p(center + stop * tick_diff))
             )
             prev_stop = stop
+
+
+class ScientificNotation(PresentationScene):
+    def construct(self):
+        num = DecimalNumber(0, num_decimal_places=2, color=REAL_COLOR)
