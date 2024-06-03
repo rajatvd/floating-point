@@ -11,8 +11,8 @@ config.video_dir = os.path.join(dir_path, "videos")
 config.media_dir = os.path.join(dir_path, "media")
 config.flush_cache = False
 config.disable_caching = False
-config.quality = "medium_quality"
-# config.quality = "production_quality"
+# config.quality = "medium_quality"
+config.quality = "production_quality"
 
 REAL_COLOR = DARKGREEN  # dark green
 NEUTRAL_COLOR = "#000000"
