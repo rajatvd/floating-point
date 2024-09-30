@@ -2,7 +2,7 @@ from manim import *
 from manim.utils.color.X11 import DARKGREEN
 from manim_revealjs import PresentationScene, COMPLETE_LOOP
 import os
-from globals import REAL_COLOR, NEUTRAL_COLOR, ARROW_COLOR, COMPUTER_COLOR
+from globals import REAL_COLOR, ARROW_COLOR, COMPUTER_COLOR, myround
 
 # get absolute path of this python file
 file_path = os.path.realpath(__file__)
@@ -23,14 +23,6 @@ config.frame_width = 15
 
 # set background color to white
 config.background_color = "#FFFFFF"
-
-
-def myround(x, base, places_to_round):
-    out = round(x / base, ndigits=places_to_round + 1) * base
-    # convert x to base base
-
-    # print(f"rounding {x} to {out}")
-    return out
 
 
 class RoundOff(PresentationScene):
