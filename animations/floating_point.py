@@ -2,6 +2,7 @@ from manim import *
 from manim.utils.color.X11 import DARKGREEN
 from manim_revealjs import PresentationScene, COMPLETE_LOOP
 import os
+from globals import REAL_COLOR, NEUTRAL_COLOR, ARROW_COLOR, COMPUTER_COLOR
 
 # get absolute path of this python file
 file_path = os.path.realpath(__file__)
@@ -11,14 +12,14 @@ config.video_dir = os.path.join(dir_path, "videos")
 config.media_dir = os.path.join(dir_path, "media")
 config.flush_cache = False
 config.disable_caching = False
-# config.quality = "medium_quality"
-config.quality = "production_quality"
-
-REAL_COLOR = DARKGREEN  # dark green
-NEUTRAL_COLOR = "#000000"
-# NEUTRAL_COLOR = "#FFFFFF"
-ARROW_COLOR = "#0000FF"
-COMPUTER_COLOR = "#FF0000"
+relative_frame_size = np.array((10, 3))
+resolution = 384
+config.pixel_width = int(relative_frame_size[0] * resolution)
+config.pixel_height = int(relative_frame_size[1] * resolution)
+config.frame_width = 15
+# config.frame_size = tuple(relative_frame_size * resolution)
+# config.quality = "production_quality"
+# config.quality = "low_quality"
 
 # set background color to white
 config.background_color = "#FFFFFF"
@@ -219,8 +220,3 @@ class RoundOff(PresentationScene):
                 ).move_to(number_line.n2p(center + stop * tick_diff))
             )
             prev_stop = stop
-
-
-class ScientificNotation(PresentationScene):
-    def construct(self):
-        num = DecimalNumber(0, num_decimal_places=2, color=REAL_COLOR)
