@@ -1,5 +1,6 @@
 from manim import MathTex, RoundedRectangle, VGroup, LEFT, RIGHT
 from manim.utils.color.X11 import DARKGREEN
+from bisect import bisect_left, bisect_right
 
 REAL_COLOR = DARKGREEN
 NEUTRAL_COLOR = "#000000"
@@ -9,6 +10,9 @@ COMPUTER_COLOR = "#FF0000"
 
 ABS_COLOR = "#006500"
 REL_COLOR = "#118811"
+STROKE_WIDTH = 4
+
+eps = 0.05
 
 
 # %%
@@ -20,7 +24,26 @@ def myround(x, base, places_to_round):
     return out
 
 
-eps = 0.05
+# %%
+def round_to_nearest(x, all_values):
+    left = bisect_left(all_values, x)
+    right = bisect_right(all_values, x)
+    if right == len(all_values):
+        right -= 1
+    if left == 0:
+        left += 1
+    if x - all_values[left - 1] < all_values[left] - x:
+        return all_values[left - 1]
+    else:
+        return all_values[left]
+
+
+# %%
+def value_to_error(value, all_values):
+    r = round_to_nearest(value, all_values)
+    i = bisect_left(all_values, r)
+    error = max(abs(r - all_values[i - 1]), abs(r - all_values[i + 1])) / 2
+    return error
 
 
 # %%

@@ -2,7 +2,7 @@ from manim import *
 from manim.utils.color.X11 import DARKGREEN
 from manim_revealjs import PresentationScene, COMPLETE_LOOP
 import os
-from globals import REAL_COLOR, ARROW_COLOR, COMPUTER_COLOR, myround
+from globals import REAL_COLOR, ARROW_COLOR, COMPUTER_COLOR, myround, STROKE_WIDTH
 
 # get absolute path of this python file
 file_path = os.path.realpath(__file__)
@@ -37,7 +37,6 @@ class RoundOff(PresentationScene):
         x_range = [center - count * tick_diff, center + count * tick_diff, tick_diff]
         unit_length = 1.3
 
-        stroke_width = 4
         vertical_shift = 1.2
         horizontal_shift = 2
         number_shift_factor = 2.3
@@ -48,7 +47,7 @@ class RoundOff(PresentationScene):
             x_range=x_range,
             color=REAL_COLOR,
             include_numbers=True,
-            stroke_width=stroke_width,
+            stroke_width=STROKE_WIDTH,
             unit_size=unit_length / tick_diff,
             decimal_number_config={
                 "color": REAL_COLOR,
