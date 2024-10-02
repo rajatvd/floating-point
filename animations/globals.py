@@ -9,8 +9,9 @@ ARROW_COLOR = "#0000FF"
 COMPUTER_COLOR = "#FF0000"
 
 ABS_COLOR = "#006500"
-REL_COLOR = "#118811"
+REL_COLOR = "#33AA33"
 STROKE_WIDTH = 4
+FONT = "Montserrat"
 
 eps = 0.05
 
@@ -42,7 +43,7 @@ def round_to_nearest(x, all_values):
 def value_to_error(value, all_values):
     r = round_to_nearest(value, all_values)
     i = bisect_left(all_values, r)
-    error = max(abs(r - all_values[i - 1]), abs(r - all_values[i + 1])) / 2
+    error = max(abs(r - all_values[i - 1]), abs(r - all_values[i + 1])) / 2.0
     return error
 
 
