@@ -2,7 +2,7 @@ from manim import *
 from manim.utils.color.X11 import DARKGREEN
 from manim_revealjs import PresentationScene, COMPLETE_LOOP
 import os
-from globals import REAL_COLOR, ARROW_COLOR, COMPUTER_COLOR, myround, STROKE_WIDTH
+from globals import REAL_COLOR, ARROW_COLOR, COMPUTER_COLOR, myround, STROKE_WIDTH, FONT
 
 # get absolute path of this python file
 file_path = os.path.realpath(__file__)
@@ -90,7 +90,7 @@ class RoundOff(PresentationScene):
             },
         )
         # make number line only have ticks
-        number_line_rounded.ticks.set_stroke(width=stroke_width)
+        number_line_rounded.ticks.set_stroke(width=STROKE_WIDTH)
         number_line_rounded.move_to(DOWN * vertical_shift + RIGHT * horizontal_shift)
         number_rounded = DecimalNumber(
             0,
@@ -159,7 +159,9 @@ class RoundOff(PresentationScene):
             angle=TAU / 4,
             color=ARROW_COLOR,
         )
-        round_text = MathTex(r"\text{round}", color=ARROW_COLOR).scale(1)
+        with register_font("Montserrat.ttf"):
+            round_text = Text("round", color=ARROW_COLOR, font=FONT).scale(0.7)
+
         round_text.next_to(curve, LEFT)
         self.add(curve, round_text)
 
