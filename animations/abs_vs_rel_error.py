@@ -7,6 +7,7 @@ from globals import (
     REL_COLOR,
     make_error_interval,
     update_error_interval,
+    FONT,
 )
 
 # get absolute path of this python file
@@ -96,11 +97,16 @@ class AbsVsRelError(PresentationScene):
         abs_number_line.move_to(UP * vertical_shift + RIGHT * horizontal_shift)
         rel_number_line.move_to(DOWN * vertical_shift + RIGHT * horizontal_shift)
 
-        abs_text = MathTex(r"\text{Constant abs error}", color=ABS_COLOR).scale(0.8)
-        abs_text.move_to(UP * vertical_shift).to_edge(LEFT)
+        with register_font("Montserrat.ttf"):
+            abs_text = Text(r"Constant abs error", color=ABS_COLOR, font=FONT).scale(
+                0.6
+            )
+            abs_text.move_to(UP * vertical_shift).to_edge(LEFT)
 
-        rel_text = MathTex(r"\text{Constant rel error}", color=REL_COLOR).scale(0.8)
-        rel_text.move_to(DOWN * vertical_shift).to_edge(LEFT)
+            rel_text = Text(r"Constant rel error", color=REL_COLOR, font=FONT).scale(
+                0.6
+            )
+            rel_text.move_to(DOWN * vertical_shift).to_edge(LEFT)
 
         self.add(
             abs_text,
