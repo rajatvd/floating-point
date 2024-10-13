@@ -340,4 +340,4 @@ class IEEE(PresentationScene):
                 FadeIn(ieee_labels),
                 FadeIn(ieee_braces),
             )
-            self.wait(4)
+            self.wait(7)
