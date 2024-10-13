@@ -27,11 +27,11 @@ config.media_dir = os.path.join(dir_path, "media")
 config.flush_cache = False
 config.disable_caching = False
 relative_frame_size = np.array((11, 6))
-resolution = 38
+resolution = 384
 # resolution = 30
 config.pixel_width = int(relative_frame_size[0] * resolution)
 config.pixel_height = int(relative_frame_size[1] * resolution)
-config.frame_width = 26
+config.frame_width = 28
 # config.frame_size = tuple(relative_frame_size * resolution)
 # config.quality = "production_quality"
 # config.quality = "low_quality"
@@ -62,7 +62,7 @@ def to_scientific_notation(x: str):
 MANTISSA_COLOR = "#FF1313"
 SIGN_COLOR = "#0077FF"
 EXPONENT_COLOR = "#109910"
-IGNORE_COLOR = "#999999"
+IGNORE_COLOR = "#B0B0B0"
 DEFAULT_COLOR = "#000000"
 
 
@@ -82,14 +82,14 @@ class IEEE(PresentationScene):
 
             shift = 1.2
             original = MathTex(x, color=DEFAULT_COLOR).scale(text_scale)
-            original.to_edge(UP)
             original.to_edge(LEFT)
+            original.to_edge(UP, buff=-0.0)
             original.shift(RIGHT * shift)
 
-            def below_and_shift(m, ref):
-                m.next_to(ref, DOWN)
+            def below_and_shift(m, ref, shi=shift, down_buff=1.5):
+                m.next_to(ref, DOWN, buff=down_buff)
                 m.to_edge(LEFT)
-                m.shift(RIGHT * shift)
+                m.shift(RIGHT * shi)
 
             scientific = MathTex(
                 f"1.",
@@ -156,7 +156,8 @@ class IEEE(PresentationScene):
 
             pre_log_binary = MathTex(
                 "(",
-                "1 + 0.",
+                "1 + ",
+                "0.",
                 f"{m_padded}",
                 ")",
                 " \\times 2^{",
@@ -166,18 +167,19 @@ class IEEE(PresentationScene):
             ).scale(text_scale)
             pre_log_binary[0].set_color(DEFAULT_COLOR)
             pre_log_binary[1].set_color(IGNORE_COLOR)
-            pre_log_binary[2].set_color(MANTISSA_COLOR)
-            pre_log_binary[3].set_color(DEFAULT_COLOR)
+            pre_log_binary[2].set_color(IGNORE_COLOR)
+            pre_log_binary[3].set_color(MANTISSA_COLOR)
             pre_log_binary[4].set_color(DEFAULT_COLOR)
-            pre_log_binary[5].set_color(EXPONENT_COLOR)
-            pre_log_binary[6].set_color(IGNORE_COLOR)
+            pre_log_binary[5].set_color(DEFAULT_COLOR)
+            pre_log_binary[6].set_color(EXPONENT_COLOR)
+            pre_log_binary[7].set_color(IGNORE_COLOR)
             below_and_shift(pre_log_binary, original)
 
             pre_log_binary_exp = VGroup(
-                pre_log_binary[3],
                 pre_log_binary[4],
                 pre_log_binary[5],
                 pre_log_binary[6],
+                pre_log_binary[7],
             )
 
             post_log = MathTex(
@@ -192,7 +194,23 @@ class IEEE(PresentationScene):
             post_log[2].set_color(DEFAULT_COLOR)
             post_log[3].set_color(EXPONENT_COLOR)
             post_log[4].set_color(IGNORE_COLOR)
-            post_log.next_to(pre_log_binary, DOWN)
+            post_log.move_to(pre_log_binary[2], aligned_edge=LEFT)
+            post_log.shift(DOWN * 3.0)
+
+            # creat a vertical arrow from pre_log_binary to the centre of post_log with a label saying "log_2"
+            post_log_center_x = post_log.get_center()[0]
+            pre_log_binary_bottom_y = pre_log_binary.get_bottom()[1]
+            post_log_top_y = post_log.get_top()[1]
+            arrow = Arrow(
+                start=[post_log_center_x, pre_log_binary_bottom_y, 0],
+                end=[post_log_center_x, post_log_top_y, 0],
+                color=ORANGE,
+            )
+
+            log_2 = MathTex(r"\log_2").scale(text_scale)
+            log_2.next_to(arrow, RIGHT)
+            log_2.set_color(ORANGE)
+            arrow_grp = VGroup(arrow, log_2)
 
             ieee = MathTex(
                 r"0 \ \ ",
@@ -204,7 +222,7 @@ class IEEE(PresentationScene):
             ieee[1].set_color(EXPONENT_COLOR)
             ieee[2].set_color(IGNORE_COLOR)
             ieee[3].set_color(MANTISSA_COLOR)
-            ieee.next_to(post_log, DOWN)
+            below_and_shift(ieee, post_log, shi=5.5, down_buff=2.0)
 
             # add boxes around each section of the binary number, with transparent fill
             buff = 0.2
@@ -228,7 +246,6 @@ class IEEE(PresentationScene):
                     buff=buff,
                 ),
             )
-            self.add(ieee_boxes)
 
             # add labels below each section of the binary number with braces
             ieee_labels = VGroup(
@@ -245,13 +262,20 @@ class IEEE(PresentationScene):
                 Brace(ieee[3], DOWN, color=MANTISSA_COLOR),
             )
 
-            ieee_labels[0].next_to(ieee[0], LEFT)
+            ieee_labels[0].next_to(ieee[0], LEFT, buff=0.5)
             ieee_labels[1].next_to(ieee_braces[0], DOWN)
             ieee_labels[2].next_to(ieee_braces[1], DOWN)
 
+            title = Text(
+                "IEEE 754 Standard for 32-bit Floating Point",
+                font=FONT,
+                color=ABS_COLOR,
+            ).scale(1.7)
+            title.to_edge(UP, buff=-2.5)
+            self.add(title)
             self.play(FadeIn(original))
             self.play(FadeIn(scientific))
-            self.wait(1)
+            self.wait(2)
             self.play(Transform(scientific[-1], scientific_with_shifted_exponent[-1]))
             self.wait(1)
             self.play(
@@ -271,23 +295,49 @@ class IEEE(PresentationScene):
                         pre_log[6],
                     )
                 ),
-                TransformMatchingTex(
+                Transform(
                     Group(scientific[0], scientific[1]),
                     Group(pre_log[0], pre_log[1], pre_log[2], pre_log[3]),
                     replace_mobject_with_target_in_scene=True,
                 ),
             )
             self.wait(1)
-            self.wait(1)
             self.play(Group(exp_part, pre_log[3]).animate.move_to(pre_log_binary_exp))
-            self.wait(1)
             self.play(
-                FadeIn(pre_log_binary[2]),
+                FadeIn(pre_log_binary[3]),
                 FadeOut(pre_log[2]),
             )
             self.wait(1)
-            self.add(post_log)
-            self.add(ieee)
-            self.add(ieee_braces)
-            self.add(ieee_labels)
-            self.wait(10)
+            self.play(
+                FadeIn(arrow_grp),
+                TransformFromCopy(
+                    pre_log_binary[2:4],
+                    post_log[:2],
+                    # replace_mobject_with_target_in_scene=True,
+                ),
+                TransformFromCopy(
+                    scientific[-2],
+                    post_log[2],
+                    # replace_mobject_with_target_in_scene=True,
+                ),
+                TransformFromCopy(
+                    binary_exponent_grp,
+                    post_log[3:],
+                    # replace_mobject_with_target_in_scene=True,
+                ),
+            )
+            self.wait(3)
+            self.play(
+                TransformFromCopy(post_log[1], ieee[3]),
+                TransformFromCopy(post_log[0], ieee[2]),
+                TransformFromCopy(post_log[3], ieee[1]),
+                run_time=2,
+            )
+            self.wait(1)
+            self.play(
+                FadeIn(ieee[0]),
+                FadeIn(ieee_boxes),
+                FadeIn(ieee_labels),
+                FadeIn(ieee_braces),
+            )
+            self.wait(4)
