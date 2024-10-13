@@ -39,12 +39,16 @@ class AbsVsRelError(PresentationScene):
         assert base == 10, "base must be 10 for now"
 
         count = 10
-        places_to_round = 1
+        places_to_round = 0
         total_line_length = 10
 
         tick_diff = base**-places_to_round
         center = tick_diff * count
-        x_range = [center - count * tick_diff, center + count * tick_diff, tick_diff]
+        x_range = [
+            center - count * tick_diff,
+            center + count * tick_diff,
+            tick_diff * 2,
+        ]
         unit_length = total_line_length / (2 * count)
 
         stroke_width = 4
@@ -54,7 +58,7 @@ class AbsVsRelError(PresentationScene):
         abs_number_line = NumberLine(
             x_range=x_range,
             color=ABS_COLOR,
-            include_numbers=False,
+            include_numbers=True,
             stroke_width=stroke_width,
             unit_size=unit_length / tick_diff,
             decimal_number_config={
@@ -73,7 +77,7 @@ class AbsVsRelError(PresentationScene):
         rel_number_line = NumberLine(
             x_range=x_range,
             color=REL_COLOR,
-            include_numbers=False,
+            include_numbers=True,
             stroke_width=stroke_width,
             unit_size=unit_length / tick_diff,
             decimal_number_config={
@@ -134,7 +138,7 @@ class AbsVsRelError(PresentationScene):
 
         def get_rel_error_width():
             value = rel_number_line.p2n(rel_marker.get_center())
-            error = abs(value * tick_diff) * 6
+            error = abs(value * tick_diff) * 0.12
             return error
 
         rel_error.add_updater(
