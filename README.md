@@ -1,11 +1,14 @@
-# Reveal.js slides template
+# Perspectives on Floating Point -- Animations
 
-A simple template for reveal.js presentations. To start a presentation you need to have a simple http server running. To set this up, you can run 
+This repo contains code to generate animations for my blog post -- [Perspectives on Floating Point](https://www.eigentales.com/Floating-Point/).
 
-```
-python3 -m http.server
-```
+`manim render <animation_file>.py <scene_name>` to render the animations.
 
-for example.
+In `animations` directory, run:
 
-This template includes all of the standard reveal.js plugins as well as the [manim-revealjs plugin](http://github.com/RickDW/manim-revealjs). This plugin makes it easy to use the [Manim](http://www.manim.community) animation software for your presentations.
+* `manim render floating_point.py RoundOff`
+* `manim render abs_vs_rel_error.py AbsVsRelError`
+* `manim render log_fixed_point.py LogFixedPoint`
+* `manim render ieee_standard.py IEEE`
+
+
